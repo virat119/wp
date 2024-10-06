@@ -1,5 +1,5 @@
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,30 +8,29 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <div class="container">
-        <h1 class="mt-5">WhatsApp Automation Tool</h1>
-        <pre>{{ logo }}</pre>
-        <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
+    <div class="container text-center mt-5">
+        <pre>{{ logo|safe }}</pre>
+        <h2>QR Code for WhatsApp Web</h2>
+        <img src="{{ url_for('qrcode_view') }}" alt="QR Code" class="img-fluid" style="width: 300px;">
+        <form action="/upload" method="post" enctype="multipart/form-data" class="mt-4">
+            <div class="form-group">
+                <label for="file">Upload Message File (TXT):</label>
+                <input type="file" name="file" accept=".txt" class="form-control" required>
+            </div>
             <div class="form-group">
                 <label for="session_name">Session Name:</label>
-                <input type="text" class="form-control" name="session_name" required>
+                <input type="text" name="session_name" placeholder="Enter Session Name" class="form-control" required>
             </div>
             <div class="form-group">
-                <label for="file">Upload .txt file:</label>
-                <input type="file" class="form-control" name="file" accept=".txt" required>
+                <label for="delay_seconds">Delay Between Messages (Seconds):</label>
+                <input type="number" name="delay_seconds" placeholder="Enter Delay in Seconds" class="form-control" required>
             </div>
             <div class="form-group">
-                <label for="delay_seconds">Delay (seconds):</label>
-                <input type="number" class="form-control" name="delay_seconds" value="5" required>
+                <label for="target_number">Target WhatsApp Number:</label>
+                <input type="text" name="target_number" placeholder="Enter Target Number" class="form-control" required>
             </div>
-            <div class="form-group">
-                <label for="target_number">Target Number:</label>
-                <input type="text" class="form-control" name="target_number" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Start Sending Messages</button>
+            <button type="submit" class="btn btn-primary">Start</button>
         </form>
-        <a href="{{ url_for('qrcode_view') }}" class="btn btn-secondary mt-3">Generate QR Code</a>
-        <a href="{{ url_for('logout') }}" class="btn btn-danger mt-3">Logout</a>
     </div>
 </body>
 </html>
