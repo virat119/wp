@@ -3,100 +3,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WhatsApp Automation Tool</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            width: 400px;  /* Set a width for better styling */
-        }
-        h1 {
-            text-align: center;
-            color: #4CAF50;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        label {
-            font-weight: bold;
-        }
-        input, select, button {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .qr-code {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .stop-task {
-            margin-top: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
     <div class="container">
-        <h1>WhatsApp Automation Tool</h1>
-        
-        <!-- Logo from Flask -->
-        <div>{{ logo | safe }}</div>
-
-        <!-- Form for uploading file -->
-        <form action="/upload" method="POST" enctype="multipart/form-data">
-            <label for="session_name">Session Name:</label>
-            <input type="text" id="session_name" name="session_name" required>
-
-            <label for="target_number">Target WhatsApp Number:</label>
-            <input type="text" id="target_number" name="target_number" placeholder="+91XXXXXXXXXX" required>
-
-            <label for="delay_seconds">Delay between messages (seconds):</label>
-            <input type="number" id="delay_seconds" name="delay_seconds" required>
-
-            <label for="file">Upload Message File (.txt):</label>
-            <input type="file" id="file" name="file" accept=".txt" required>
-
-            <button type="submit">Start Session</button>
+        <h1 class="mt-5">WhatsApp Automation Tool</h1>
+        <pre>{{ logo }}</pre>
+        <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="session_name">Session Name:</label>
+                <input type="text" class="form-control" name="session_name" required>
+            </div>
+            <div class="form-group">
+                <label for="file">Upload .txt file:</label>
+                <input type="file" class="form-control" name="file" accept=".txt" required>
+            </div>
+            <div class="form-group">
+                <label for="delay_seconds">Delay (seconds):</label>
+                <input type="number" class="form-control" name="delay_seconds" value="5" required>
+            </div>
+            <div class="form-group">
+                <label for="target_number">Target Number:</label>
+                <input type="text" class="form-control" name="target_number" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Start Sending Messages</button>
         </form>
-
-        <!-- QR Code Section -->
-        <div class="qr-code">
-            <h2>Scan QR Code</h2>
-            <img src="/qrcode" alt="QR Code for WhatsApp">
-        </div>
-
-        <!-- Stop Task Section -->
-        <div class="stop-task">
-            <h2>Stop a Task</h2>
-            <form action="/stop" method="POST">
-                <label for="task_id">Enter Task ID to Stop:</label>
-                <input type="text" id="task_id" name="task_id" required>
-                <button type="submit">Stop Task</button>
-            </form>
-        </div>
+        <a href="{{ url_for('qrcode_view') }}" class="btn btn-secondary mt-3">Generate QR Code</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger mt-3">Logout</a>
     </div>
 </body>
 </html>
