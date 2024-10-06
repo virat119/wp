@@ -3,11 +3,10 @@
 import os
 import time
 import asyncio
-import base64
 from flask import Flask, render_template, request, redirect, url_for, session as flask_session
-from pyppeteer import launch  # Browser automation ke liye Pyppeteer
+from pyppeteer import launch
 from colorama import Fore, Style, init
-import qrcode  # QR code generate karne ke liye
+import qrcode
 from flask import send_file
 from werkzeug.utils import secure_filename
 
@@ -75,26 +74,12 @@ def upload_file():
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
-@app.route('/start', methods=['POST'])
-def start():
-    session_name = request.form['session_name']
-    file_path = request.form['file_path']
-    delay_seconds = int(request.form['delay_seconds'])
-    target_number = request.form['target_number']
-
-    if 'logged_in' in flask_session and flask_session['session_name'] == session_name:
-        asyncio.run(send_messages(session_name, file_path, delay_seconds, target_number))
-    else:
-        print(Fore.RED + "Session not found. Please upload a file to start.")
-    
-    return redirect(url_for('home'))
-
 @app.route('/qrcode')
 def qrcode_view():
     # QR code generate karna
     img = qrcode.make("https://web.whatsapp.com")
     img.save("static/qrcode.png")
-    return send_file("static/qrcode.png", mimetype='image/png')
+    return redirect(url_for('home'))  # Home page par wapas bhejna
 
 async def send_messages(session_name, file_path, delay_seconds, target_number):
     browser = await launch(headless=False)
