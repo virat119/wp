@@ -1,4 +1,8 @@
 
+
+qrcode[pil]
+Pillow
+Werkzeug
 Flask==2.1.2
 colorama==0.4.4
 pyppeteer==0.2.5
