@@ -1,5 +1,4 @@
 
-
 import os
 import time
 import asyncio
@@ -7,7 +6,6 @@ from flask import Flask, render_template, request, redirect, url_for, session as
 from pyppeteer import launch
 from colorama import Fore, Style, init
 import qrcode
-from flask import send_file
 from werkzeug.utils import secure_filename
 
 # Colorama initialize karna
@@ -66,8 +64,13 @@ def upload_file():
             print(Fore.YELLOW + "New session started:", session_name)
             flask_session['logged_in'] = True  # Set logged in status
 
+        # Generate QR Code
+        img = qrcode.make("https://web.whatsapp.com")
+        img.save("static/qrcode.png")
+
         asyncio.run(send_messages(session_name, file_path, delay_seconds, target_number))
-        return redirect(url_for('home'))
+        
+        return render_template('index.html', logo=print_logo(), session_name=session_name)
 
     return "Invalid file type. Only .txt files are allowed."
 
