@@ -1,36 +1,63 @@
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WhatsApp Automation Tool</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .logo {
+            text-align: center;
+            margin: 20px;
+            font-size: 24px;
+            color: #28a745;
+        }
+        .qrcode {
+            text-align: center;
+            margin: 20px;
+        }
+    </style>
 </head>
 <body>
-    <div class="container text-center mt-5">
-        <pre>{{ logo|safe }}</pre>
-        <h2>QR Code for WhatsApp Web</h2>
-        <img src="{{ url_for('qrcode_view') }}" alt="QR Code" class="img-fluid" style="width: 300px;">
-        <form action="/upload" method="post" enctype="multipart/form-data" class="mt-4">
-            <div class="form-group">
-                <label for="file">Upload Message File (TXT):</label>
-                <input type="file" name="file" accept=".txt" class="form-control" required>
+    <div class="container">
+        <h1 class="logo">WhatsApp Automation Tool</h1>
+        <div class="form-container">
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="session_name">Session Name:</label>
+                    <input type="text" class="form-control" name="session_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="target_number">Target Number:</label>
+                    <input type="text" class="form-control" name="target_number" required>
+                </div>
+                <div class="form-group">
+                    <label for="delay_seconds">Delay (in seconds):</label>
+                    <input type="number" class="form-control" name="delay_seconds" required>
+                </div>
+                <div class="form-group">
+                    <label for="file">Upload .txt file:</label>
+                    <input type="file" class="form-control-file" name="file" accept=".txt" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+        
+        {% if session_name %}
+            <div class="qrcode">
+                <h2>QR Code for WhatsApp Web</h2>
+                <img src="{{ url_for('static', filename='qrcode.png') }}" alt="QR Code">
+                <p>Scan the QR code to log in to WhatsApp Web.</p>
             </div>
-            <div class="form-group">
-                <label for="session_name">Session Name:</label>
-                <input type="text" name="session_name" placeholder="Enter Session Name" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <label for="delay_seconds">Delay Between Messages (Seconds):</label>
-                <input type="number" name="delay_seconds" placeholder="Enter Delay in Seconds" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <label for="target_number">Target WhatsApp Number:</label>
-                <input type="text" name="target_number" placeholder="Enter Target Number" class="form-control" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Start</button>
-        </form>
+        {% endif %}
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
